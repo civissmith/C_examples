@@ -55,7 +55,7 @@ int main(){
   
   /* Read from the terminal */
   run = 1;
-  printf("\E[2J\E[;HPress BACKSPACE to quit...\n");
+  printf("\e[2J\e[;HPress BACKSPACE to quit...\n");
   while( run ){
     /* Clear the buffer each time */
     memset( c, '\0', MINBYTES );
@@ -66,41 +66,49 @@ int main(){
     }
 
     /* Catch the UP arrow */
-    if( !(strcmp( c, "\E[A") )){
-      printf("\E[5;20HHey, an UP ARROW\n");
+    if( !(strcmp( c, "\e[A") )){
+      printf("\e[2J");
+      printf("\e[5;20HHey, an UP ARROW");
       fflush(stdout);
       continue;
     } 
     /* Catch the DOWN arrow */
-    if( !(strcmp( c, "\E[B") )){
-      printf("\E[15;20HHey, an DOWN ARROW\n");
+    if( !(strcmp( c, "\e[B") )){
+      printf("\e[2J");
+      printf("\e[15;20HHey, an DOWN ARROW");
       fflush(stdout);
       continue;
     } 
     /* Catch the RIGHT arrow */
-    if( !(strcmp( c, "\E[C") )){
-      printf("\E[10;35HHey, an RIGHT ARROW\n");
+    if( !(strcmp( c, "\e[C") )){
+      printf("\e[2J");
+      printf("\e[10;35HHey, an RIGHT ARROW");
       fflush(stdout);
       continue;
     } 
     /* Catch the LEFT arrow */
-    if( !(strcmp( c, "\E[D") )){
-      printf("\E[10;5HHey, an LEFT ARROW\n");
+    if( !(strcmp( c, "\e[D") )){
+      printf("\e[2J");
+      printf("\e[10;5HHey, an LEFT ARROW");
       fflush(stdout);
       continue;
     } 
 
 
+    printf("\e[2;1H");
     for( j = 0; j < MINBYTES; j++ ){
       if( (c[j] &= 255 ) == 0177){
         run = 0;
         break;
       }
       /* Set the cursor before writing characters */
-      printf("\E[2;1H");
       if( c[j] != '\0' ){
-         printf("0x%0x:%c\n", c[j], c[j]);
+         printf("0x%0x:%c ", c[j], c[j]);
+      }else{
+         printf("\e[K");
       }
+      fflush(stdout);
+   
     }
   }
 
