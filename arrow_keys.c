@@ -20,7 +20,7 @@
 #include <string.h>
 
 static struct termios save_termios;
-#define MINBYTES 5
+#define MINBYTES 3
 #define TIME     1
 
 int main(){
@@ -55,6 +55,7 @@ int main(){
   
   /* Read from the terminal */
   run = 1;
+  printf("\E[2J\E[;HPress BACKSPACE to quit...\n");
   while( run ){
     /* Clear the buffer each time */
     memset( c, '\0', MINBYTES );
@@ -63,12 +64,43 @@ int main(){
        printf("Read error!\n");
        break;
     }
+
+    /* Catch the UP arrow */
+    if( !(strcmp( c, "\E[A") )){
+      printf("\E[5;20HHey, an UP ARROW\n");
+      fflush(stdout);
+      continue;
+    } 
+    /* Catch the DOWN arrow */
+    if( !(strcmp( c, "\E[B") )){
+      printf("\E[15;20HHey, an DOWN ARROW\n");
+      fflush(stdout);
+      continue;
+    } 
+    /* Catch the RIGHT arrow */
+    if( !(strcmp( c, "\E[C") )){
+      printf("\E[10;35HHey, an RIGHT ARROW\n");
+      fflush(stdout);
+      continue;
+    } 
+    /* Catch the LEFT arrow */
+    if( !(strcmp( c, "\E[D") )){
+      printf("\E[10;5HHey, an LEFT ARROW\n");
+      fflush(stdout);
+      continue;
+    } 
+
+
     for( j = 0; j < MINBYTES; j++ ){
       if( (c[j] &= 255 ) == 0177){
         run = 0;
         break;
       }
-      printf("%x\n", c[j]);
+      /* Set the cursor before writing characters */
+      printf("\E[2;1H");
+      if( c[j] != '\0' ){
+         printf("0x%0x:%c\n", c[j], c[j]);
+      }
     }
   }
 
