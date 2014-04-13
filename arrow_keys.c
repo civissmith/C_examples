@@ -55,7 +55,9 @@ int main(){
   
   /* Read from the terminal */
   run = 1;
-  printf("\e[2J\e[;HPress BACKSPACE to quit...\n");
+  printf("\e[;H\e[KPress Q or q to quit...");
+  printf("\e[2;H\e[K");
+  printf("\e[3;H\e[K");
   while( run ){
     /* Clear the buffer each time */
     memset( c, '\0', MINBYTES );
@@ -67,29 +69,51 @@ int main(){
 
     /* Catch the UP arrow */
     if( !(strcmp( c, "\e[A") )){
-      printf("\e[2J");
-      printf("\e[5;20HHey, an UP ARROW");
+      printf("\e[5;20HUP ARROW");
+      /* Kill the left/right and down lines */
+      printf("\e[10;H\e[K");
+      printf("\e[15;H\e[K");
+
+      /* Home the cursor */
+      printf("\e[;H");
       fflush(stdout);
       continue;
     } 
     /* Catch the DOWN arrow */
     if( !(strcmp( c, "\e[B") )){
-      printf("\e[2J");
-      printf("\e[15;20HHey, an DOWN ARROW");
+      printf("\e[15;20HDOWN ARROW");
+      /* Kill the left/right and up lines */
+      printf("\e[10;H\e[K");
+      printf("\e[5;H\e[K");
+
+      /* Home the cursor */
+      printf("\e[;H");
       fflush(stdout);
       continue;
     } 
     /* Catch the RIGHT arrow */
     if( !(strcmp( c, "\e[C") )){
-      printf("\e[2J");
-      printf("\e[10;35HHey, an RIGHT ARROW");
+      /* Kill the left/right and up/down lines */
+      printf("\e[5;H\e[K");
+      printf("\e[10;H\e[K");
+      printf("\e[15;H\e[K");
+      printf("\e[10;35HRIGHT ARROW");
+
+      /* Home the cursor */
+      printf("\e[;H");
       fflush(stdout);
       continue;
     } 
     /* Catch the LEFT arrow */
     if( !(strcmp( c, "\e[D") )){
-      printf("\e[2J");
-      printf("\e[10;5HHey, an LEFT ARROW");
+      /* Kill the left/right and up/down lines */
+      printf("\e[5;H\e[K");
+      printf("\e[10;H\e[K");
+      printf("\e[15;H\e[K");
+      printf("\e[10;5HLEFT ARROW");
+
+      /* Home the cursor */
+      printf("\e[;H");
       fflush(stdout);
       continue;
     } 
@@ -97,7 +121,7 @@ int main(){
 
     printf("\e[2;1H");
     for( j = 0; j < MINBYTES; j++ ){
-      if( (c[j] &= 255 ) == 0177){
+      if( c[j] == 'q' || c[j] == 'Q' ){
         run = 0;
         break;
       }
@@ -112,6 +136,7 @@ int main(){
     }
   }
 
+  printf("\e[2J\e[;H");
   if( tcsetattr(STDIN_FILENO, TCSAFLUSH, &save_termios) < 0){
     printf("Could not set terminal correctly.\n");
     exit(2);
