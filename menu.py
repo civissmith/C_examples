@@ -24,11 +24,19 @@ import tty
 #{
 def main():
   selections = [
-  "1. Selection 1",
-  "2. Selection 2",
+  "1. Print Hello",
+  "2. Test Selection",
   "3. Selection 3",
   "4. Selection 4",
   "5. Selection 5",
+  ]
+
+  functions = [
+    print_hello,
+    test_print_line,
+    test_print_line,
+    test_print_line,
+    test_print_line,
   ]
 
   # Use stdin as the file descriptor
@@ -100,12 +108,40 @@ def main():
          selected = 0
       if selected < 0:
          selected = length
+      
+      # Select the function if "Enter" is selected
+      if cmd == '\x0A':
+        functions[selected]()
+        break
 
   finally:
     # On the way out, set the attributes back
     termios.tcsetattr(fd, termios.TCSANOW, saved_tty)
 #}
 # end main()
+#
+
+#
+# kill_line: Move the cursor to a specific location
+#            and kills the line.
+#{
+def kill_line(row=1, col=1):
+  # Use sys.stdout.write() - print() will not honor ANSI codes.
+  move_cursor(row,col)
+  sys.stdout.write( "\x1B[K" )
+#}
+#
+#
+
+#
+# print_hello: Prints "Hello World!"
+#{
+def print_hello():
+  move_cursor()
+  kill_line()
+  print_line("Hello World!", "RED", "YELLOW")
+#}
+#
 #
 
 #
