@@ -1,4 +1,4 @@
-C_examples
+Terminal I/O
 ==========
 
-Example Code Snippets in C
+This repo contains example code for terminal I/O in either C or Python.
