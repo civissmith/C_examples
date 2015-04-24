@@ -74,4 +74,6 @@ int main(  )
     }
     printf( "\E[2J\E[;H" );
     printf( "password: \E[45m%s\E[0m\n", ptr );
+
+    return EXIT_SUCCESS;
 }

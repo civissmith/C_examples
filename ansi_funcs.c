@@ -15,6 +15,7 @@
 *******************************************************************************/
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #define TMPSTRSZ  20
 #define RED    41
 #define GREEN  42
@@ -71,4 +72,5 @@ int main(  )
         sleep( 1 );
     }
 
+    return EXIT_SUCCESS;
 }
